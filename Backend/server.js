@@ -17,12 +17,17 @@ const commentRoutes = require("./routes/commentRoutes");
 const reactionRoutes = require("./routes/reactionRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const userRoutes = require("./routes/userRoutes");
+const profileRoutes=require("./routes/Profile.js")
+const { cloudinaryConnect } = require("./config/cloudinary");
 
 // Initialize Express App
 const app = express();
 
 // Connect to Database
 connectDB();
+
+//cloudinary connection
+cloudinaryConnect();
 
 // Middleware Setup
 app.use(express.json());
@@ -38,6 +43,7 @@ app.get("/api/test", (req, res) => {
 
 // API Routes
 app.use("/api/users", userRoutes);
+app.use("/api/profile", profileRoutes);
 app.use("/api/posts",  postRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/reactions",  reactionRoutes);
