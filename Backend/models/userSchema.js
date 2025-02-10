@@ -19,9 +19,11 @@ const userSchema = new mongoose.Schema(
 			required: true,
 			ref: "profile",
 		},
-        socialLinks: {
-            github: { type: String, default: "" },
-            linkedin: { type: String, default: "" },
+        gender: {
+            type: String,
+        },
+        dateOfBirth: {
+            type: String,
         },
         posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
         comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],

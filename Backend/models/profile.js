@@ -2,12 +2,7 @@ const mongoose = require("mongoose");
 
 // Define the Profile schema
 const profileSchema = new mongoose.Schema({
-	gender: {
-		type: String,
-	},
-	dateOfBirth: {
-		type: String,
-	},
+
 	about: {
 		type: String,
 		trim: true,
@@ -16,6 +11,10 @@ const profileSchema = new mongoose.Schema({
 		type: Number,
 		trim: true,
 	},
+	socialLinks: {
+				github: { type: String, default: "" },
+				linkedin: { type: String, default: "" },
+			},
 });
 
 // Export the Profile model
