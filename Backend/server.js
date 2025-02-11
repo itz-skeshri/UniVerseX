@@ -17,7 +17,7 @@ const commentRoutes = require("./routes/commentRoutes");
 const reactionRoutes = require("./routes/reactionRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const userRoutes = require("./routes/userRoutes");
-const profileRoutes=require("./routes/Profile.js")
+const profileRoutes=require("./routes/profileRoutes.js")
 const { cloudinaryConnect } = require("./config/cloudinary");
 
 // Initialize Express App

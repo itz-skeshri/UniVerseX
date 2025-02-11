@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema(
         comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
         likedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
         savedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
-        role: { type: String, enum: ["Admin", "Student"], required: true, default: "Student" },
+        role: { type: String, enum: ["Admin", "Student"], default: "Student" },
         active: { type: Boolean, default: true },
     },
     { timestamps: true }

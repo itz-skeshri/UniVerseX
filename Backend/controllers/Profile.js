@@ -12,46 +12,61 @@ exports.updateProfile = async (req, res) => {
       about = "",
       contactNumber = "",
       gender = "",
-    } = req.body
-    const id = req.user.id
+    } = req.body;
 
-    // Find the profile by id
-    const userDetails = await User.findById(id)
-    const profile = await Profile.findById(userDetails.additionalDetails)
+    // Extract user ID from token
+    const userId = req.user.id;
+    console.log(userId);
 
-    const user = await User.findByIdAndUpdate(id, {
-      firstName,
-      lastName,
-    })
-    await user.save()
+    // Find the user by ID
+    const userDetails = await User.findById(userId);
+    if (!userDetails) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
 
-    // Update the profile fields
-    profile.dateOfBirth = dateOfBirth
-    profile.about = about
-    profile.contactNumber = contactNumber
-    profile.gender = gender
+    // Find the associated profile
+    const profile = await Profile.findById(userDetails.additionalDetails);
+    if (!profile) {
+      return res.status(404).json({
+        success: false,
+        message: "Profile not found",
+      });
+    }
 
-    // Save the updated profile
-    await profile.save()
+    // Update user details
+    userDetails.firstName = firstName || userDetails.firstName;
+    userDetails.lastName = lastName || userDetails.lastName;
+    await userDetails.save();
 
-    // Find the updated user details
-    const updatedUserDetails = await User.findById(id)
+    // Update profile details
+    profile.dateOfBirth = dateOfBirth || profile.dateOfBirth;
+    profile.about = about || profile.about;
+    profile.contactNumber = contactNumber || profile.contactNumber;
+    profile.gender = gender || profile.gender;
+    await profile.save();
+
+    // Fetch the updated user with populated profile details
+    const updatedUserDetails = await User.findById(userId)
       .populate("additionalDetails")
-      .exec()
+      .exec();
 
     return res.json({
       success: true,
       message: "Profile updated successfully",
       updatedUserDetails,
-    })
+    });
   } catch (error) {
-    console.log(error)
+    console.error("Error updating profile:", error);
     return res.status(500).json({
       success: false,
+      message: "Profile update failed",
       error: error.message,
-    })
+    });
   }
-}
+};
 
 // exports.deleteAccount = async (req, res) => {
 //   try {
