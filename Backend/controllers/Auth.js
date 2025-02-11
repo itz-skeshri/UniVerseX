@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs")
-const User = require("../models/User")
-const OTP = require("../models/opt")
+const User = require("../models/userSchema")
+const OTP = require("../models/otp")
 const jwt = require("jsonwebtoken")
 const otpGenerator = require("otp-generator")
 const mailSender = require("../utils/mailSender")
@@ -175,7 +175,7 @@ exports.sendotp = async (req, res) => {
       })
     }
 
-    var otp = otpGenerator.generate(6, {
+    var otp = otpGenerator.generate(4, {
       upperCaseAlphabets: false,
       lowerCaseAlphabets: false,
       specialChars: false,
