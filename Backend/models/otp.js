@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const mailSender = require("../utils/mailSender");
 const emailTemplate = require("../mail/templates/emailVerificationTemplate");
+
 const OTPSchema = new mongoose.Schema({
 	email: {
 		type: String,
@@ -13,39 +14,36 @@ const OTPSchema = new mongoose.Schema({
 	createdAt: {
 		type: Date,
 		default: Date.now,
-		expires: 60 * 5, // The document will be automatically deleted after 5 minutes of its creation time
+		expires: 300, // Document expires after 5 minutes (300 seconds)
 	},
 });
 
-// Define a function to send emails
+// Function to send verification email
 async function sendVerificationEmail(email, otp) {
-	// Create a transporter to send emails
-
-	// Define the email options
-
-	// Send the email
 	try {
 		const mailResponse = await mailSender(
 			email,
 			"Verification Email",
 			emailTemplate(otp)
 		);
-		console.log("Email sent successfully: ", mailResponse.response);
+		console.log("✅ Email sent successfully:", mailResponse.response);
 	} catch (error) {
-		console.log("Error occurred while sending email: ", error);
-		throw error;
+		console.error("❌ Error sending email:", error.message);
 	}
 }
 
-// Define a post-save hook to send email after the document has been saved
+// Pre-save hook to send email after a new document is created
 OTPSchema.pre("save", async function (next) {
-	console.log("New document saved to database");
+	if (!this.isNew) return next(); // Only send email for new documents
 
-	// Only send an email when a new document is created
-	if (this.isNew) {
+	try {
+		console.log("📩 Sending verification email to:", this.email);
 		await sendVerificationEmail(this.email, this.otp);
+		next();
+	} catch (error) {
+		console.error("❌ Error in pre-save hook:", error.message);
+		next(error);
 	}
-	next();
 });
 
 const OTP = mongoose.model("OTP", OTPSchema);
