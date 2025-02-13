@@ -1,12 +1,28 @@
 const express = require("express");
-const { addComment, getComments, deleteComment, likeComment } = require("../controllers/commentController");
-const {authMiddleware} = require("../middlewares/authMiddleware");
-const router = express.Router();
-// console.log(authMiddleware);
+const { 
+    createComment, 
+    replyToComment, 
+    getPostComments, 
+    likeComment, 
+    deleteComment 
+} = require("../controllers/commentController");
 
-router.post("/:postId", authMiddleware, addComment);
-router.get("/:postId", getComments);
-router.delete("/:commentId", authMiddleware, deleteComment);
-router.put("/:commentId/like", authMiddleware, likeComment);
+const { authMiddleware } = require("../middlewares/authMiddleware");
+
+const router = express.Router();
+
+// 📌 Comment Routes
+
+// Create a comment on a post
+router.post("/:postId/comments", authMiddleware, createComment); 
+
+// Reply to a comment (Nested under specific comment)
+router.post("/comments/:commentId/replies", authMiddleware, replyToComment);
+
+// Get all comments for a post (Includes top-level comments + replies)
+router.get("/:postId/comments", getPostComments);
+
+// Delete a comment (Deletes nested replies too)
+router.delete("/comments/:commentId", authMiddleware, deleteComment);
 
 module.exports = router;

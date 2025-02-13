@@ -5,7 +5,7 @@ const {
   deleteAccount,
   updateProfile,
   updateDisplayPicture,
-} = require("../controllers/Profile")
+} = require("../controllers/profileController")
 
 // ********************************************************************************************************
 //                                      Profile routes

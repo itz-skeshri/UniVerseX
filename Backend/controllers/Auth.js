@@ -5,7 +5,7 @@ const User = require("../models/userSchema");
 const OTP = require("../models/otp");
 const mailSender = require("../utils/mailSender");
 const { passwordUpdated } = require("../mail/templates/passwordUpdate");
-const Profile = require("../models/profile");
+const Profile = require("../models/profileSchema");
 require("dotenv").config();
 
 // **Signup Controller for Registering Users**

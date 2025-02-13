@@ -1,4 +1,4 @@
-const Profile = require("../models/profile")
+const Profile = require("../models/profileSchema")
 const User = require("../models/userSchema")
 const { uploadImageToCloudinary } = require("../utils/imageUploader")
 const mongoose = require("mongoose")
