@@ -18,6 +18,7 @@ const reactionRoutes = require("./routes/reactionRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const userRoutes = require("./routes/userRoutes");
 const profileRoutes=require("./routes/profileRoutes.js")
+const jobRoutes = require("./routes/jobRoutes.js");
 const { cloudinaryConnect } = require("./config/cloudinary");
 
 // Initialize Express App
@@ -48,7 +49,7 @@ app.use("/api/posts",  postRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/reactions",  reactionRoutes);
 app.use("/api/notifications", notificationRoutes);
-
+app.use("/api/jobposting",jobRoutes);
 // Global Error Handling Middleware
 app.use(errorMiddleware);
 
