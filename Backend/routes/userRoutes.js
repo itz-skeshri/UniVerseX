@@ -8,6 +8,7 @@ const {
   signup,
   sendotp,
   changePassword,
+  getBalance,
 } = require("../controllers/Auth")
 const {
   resetPasswordToken,
@@ -37,7 +38,8 @@ router.post("/changepassword", authMiddleware, changePassword)
 // ********************************************************************************************************
 //                                      Reset Password
 // ********************************************************************************************************
-
+// Get user balance
+router.get("/balance", authMiddleware, getBalance);
 // Route for generating a reset password token
 router.post("/reset-password-token", resetPasswordToken)
 

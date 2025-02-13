@@ -25,6 +25,7 @@ const userSchema = new mongoose.Schema(
         dateOfBirth: {
             type: String,
         },
+        balance: { type: Number, default: 0 },
         posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
         comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
         likedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
