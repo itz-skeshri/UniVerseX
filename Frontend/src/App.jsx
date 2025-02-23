@@ -9,7 +9,9 @@ import {
   ProfileEdit,
   SignUp,
   OTPVerification,
-  DashboardPage
+  ProfilePage,
+  Dashboard,
+  ContactDirectory
 } from "./pages";
 import Navbar from "./components/Navbar";
 import { ToastContainer } from "react-toastify";
@@ -64,7 +66,7 @@ const App = () => {
           }
         />
         <Route
-          path="/profile"
+          path="/profileEdit"
           element={
             <AuthenticatedRoutes>
               <ProfileEdit />
@@ -104,10 +106,26 @@ const App = () => {
           }
         />
         <Route
+          path="/profile"
+          element={
+            <AuthenticatedRoutes>
+              <ProfilePage />
+            </AuthenticatedRoutes>
+          }
+        />
+        <Route
           path="/dashboard"
           element={
             <AuthenticatedRoutes>
-              <DashboardPage />
+              <Dashboard />
+            </AuthenticatedRoutes>
+          }
+        />
+        <Route
+          path="/contactDirectory"
+          element={
+            <AuthenticatedRoutes>
+              <ContactDirectory />
             </AuthenticatedRoutes>
           }
         />

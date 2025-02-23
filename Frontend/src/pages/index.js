@@ -5,7 +5,9 @@ import Login from "./LoginPage";
 import ProfileEdit from "./ProfileEditPage";
 import SignUp from "./SignUpPage";
 import OTPVerification from "./OtpPage";
-import DashboardPage from "./DashboardPage";
+import ProfilePage from "./ProfilePage";
+import Dashboard from "./Dashboard";
+import ContactDirectory from "./ContactDirectory";
 
 export {
   BudgetTracker,
@@ -15,5 +17,7 @@ export {
   ProfileEdit,
   SignUp,
   OTPVerification,
-  DashboardPage,
+  ProfilePage,
+  Dashboard,
+  ContactDirectory
 };

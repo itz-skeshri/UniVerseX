@@ -5,8 +5,8 @@ const categorizeExpense = require("../utils/aiCategorization");
 // ✅ Add Transaction & Update Balance
 exports.addTransaction = async (req, res) => {
   try {
-    const { amount, description, type } = req.body;
-    const category = categorizeExpense(description);
+    const { amount, description, type,category } = req.body;
+    // const category = categorizeExpense(description);
     const user = await User.findById(req.user.id);
 
     if (!user) {
@@ -27,7 +27,7 @@ exports.addTransaction = async (req, res) => {
     user.balance = type === "credit" ? user.balance + amount : user.balance - amount;
     await user.save();
 
-    res.status(201).json({ transaction: newTransaction, balance: user.balance });
+    res.status(201).json({ success:true, transaction: newTransaction, balance: user.balance });
   } catch (error) {
     res.status(500).json({ message: "Error adding transaction", error: error.message });
   }

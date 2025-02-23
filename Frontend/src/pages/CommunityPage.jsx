@@ -21,8 +21,15 @@ const Community = () => {
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-gray-100 p-4 gap-y-4 md:gap-x-4">
       {/* Main Content */}
+      
       <main className="w-full md:w-3/4 flex flex-col space-y-4">  
         {/* Display Posts */}
+        <button
+        onClick={() => setCreatePostIsOpen(true)}
+        className=" w-full bg-blue-500 text-white px-4 py-2 rounded-full shadow-lg"
+      >
+        + New Post
+      </button>
         {postsStatus === "loading" && <p>Loading posts...</p>}
         {postsStatus === "failed" && <p className="text-red-500">Error: {error}</p>}
         {postsStatus === "succeeded" && posts.length > 0 ? (
@@ -31,18 +38,6 @@ const Community = () => {
           <p>No posts available</p>
         )}
       </main>
-
-      {/* New Post Button */}
-      <button
-        onClick={() => setCreatePostIsOpen(true)}
-        className="fixed bottom-10 left-4 bg-blue-500 text-white px-4 py-2 rounded-full shadow-lg"
-      >
-        + New Post
-      </button>
-
-      
-
-      {/* Sidebar */}
       <CommunitySideBar />
 
       {/* Post Creation Modal */}

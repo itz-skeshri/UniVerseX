@@ -1,54 +1,65 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../features/auth/authSlice"; // Import logout action
+import { logout } from "../features/auth/authSlice";
+import { FiMenu } from "react-icons/fi";
+import { AiOutlineClose } from "react-icons/ai";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
 
-  // Select authentication state from Redux
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const user = useSelector((state) => state.auth.user);
 
-  // Local state for user data
   const [userData, setUserData] = useState({
     userName: "User",
     userAvatar:
-      "https://www.shutterstock.com/image-vector/no-photo-vector-flat-illustration-260nw-2470053053.jpg", // Default avatar
+      "https://www.shutterstock.com/image-vector/no-photo-vector-flat-illustration-260nw-2470053053.jpg",
   });
 
-  // Dropdown state
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Update user data when authentication state changes
   useEffect(() => {
     if (isAuthenticated && user) {
       setUserData({
         userName: user.firstName,
-        userAvatar:
-          user.image
+        userAvatar: user.image,
       });
     }
   }, [isAuthenticated, user]);
 
-  // Toggle dropdown
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
   const closeDropdown = () => setIsDropdownOpen(false);
 
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
   const handleLogin = () => {
     navigate("/login");
+    closeMobileMenu();
   };
 
   const handleLogout = () => {
     dispatch(logout());
     navigate("/");
     closeDropdown();
+    closeMobileMenu();
   };
 
+  const features = [
+    { name: "Community", route: "/community" },
+    { name: "Profile", route: "/profile" },
+    { name: "Budget", route: "/budget" },
+    { name: "Class Routine", route: "/class" },
+    { name: "Contact Directory", route: "/contactDirectory" },
+    
+  ];
+
   return (
-    <nav className="flex justify-between items-center px-8 py-4 shadow-md bg-white w-full">
-      {/* Logo */}
+    <nav className="flex justify-between items-center px-6 md:px-12 py-4 shadow-md bg-white w-full relative">
       <h1
         className="text-2xl font-bold text-blue-600 cursor-pointer"
         onClick={() => navigate("/")}
@@ -56,32 +67,23 @@ const Navbar = () => {
         UniVerseX
       </h1>
 
-      {/* Menu Items */}
-      <ul className="hidden md:flex gap-6 text-gray-700">
-        <li
-          className="cursor-pointer hover:text-blue-600"
-          onClick={() => navigate("/about")}
-        >
-          About
-        </li>
-        <li
-          className="cursor-pointer hover:text-blue-600"
-          onClick={() => navigate("/mission")}
-        >
-          Mission
-        </li>
-        <li
-          className="cursor-pointer hover:text-blue-600"
-          onClick={() => navigate("/product")}
-        >
-          Product
-        </li>
+      {/* Desktop Menu - Centered */}
+      <ul className="hidden md:flex gap-8 text-gray-700 font-medium absolute left-1/2 transform -translate-x-1/2">
+        {features.map((feature, index) => (
+          <li
+            key={index}
+            className={`cursor-pointer transition-all ${location.pathname === feature.route ? "text-blue-600 font-bold" : "hover:text-blue-600"}`}
+            onClick={() => navigate(feature.route)}
+          >
+            {feature.name}
+          </li>
+        ))}
       </ul>
 
-      {/* Right Section: Login/Signup OR Avatar */}
-      <div className="relative">
+      {/* Mobile Menu and User Avatar */}
+      <div className="flex items-center gap-4">
+        {/* User Avatar - Positioned Top Right in Desktop View */}
         {isAuthenticated ? (
-          // User Avatar when logged in
           <div className="relative">
             <label
               tabIndex={0}
@@ -92,36 +94,15 @@ const Navbar = () => {
                 <img src={userData.userAvatar} alt="User Avatar" />
               </div>
             </label>
-
             {isDropdownOpen && (
-              <ul
-                tabIndex={0}
-                className="menu menu-sm dropdown-content mt-3 shadow bg-white rounded-lg w-52 absolute right-0 z-50 border border-gray-200"
-              >
+              <ul className="menu menu-sm dropdown-content mt-3 shadow bg-white rounded-lg w-52 absolute right-0 z-50 border border-gray-200">
                 <li className="p-2 text-gray-700 font-semibold">
                   {userData.userName}
                 </li>
                 <hr />
-                <li>
-                  <a
-                    className="hover:bg-gray-200 p-2 cursor-pointer"
-                    onClick={() => {
-                      navigate("/community");
-                      closeDropdown();
-                    }}
-                  >
-                    Community
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className="hover:bg-gray-200 p-2 cursor-pointer"
-                    onClick={() => {
-                      navigate("/budget");
-                      closeDropdown();
-                    }}
-                  >
-                    Budget
+                <li onClick={() => navigate("/dashboard")}>
+                  <a className="hover:bg-gray-200 p-2 cursor-pointer text-blue-500">
+                    Dashboard
                   </a>
                 </li>
                 <li onClick={handleLogout}>
@@ -133,15 +114,37 @@ const Navbar = () => {
             )}
           </div>
         ) : (
-          // Login Button when not logged in
           <button
-            className="bg-orange-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-orange-600"
+            className="hidden md:block bg-orange-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-orange-600"
             onClick={handleLogin}
           >
             Login
           </button>
         )}
+
+        {/* Mobile Menu Button */}
+        <button className="md:hidden text-gray-700" onClick={toggleMobileMenu}>
+          {isMobileMenuOpen ? <AiOutlineClose size={24} /> : <FiMenu size={24} />}
+        </button>
       </div>
+
+      {/* Mobile Dropdown Menu */}
+      {isMobileMenuOpen && (
+        <ul className="absolute top-16 left-0 w-full bg-white shadow-md py-4 flex flex-col items-center space-y-4 z-50 border-t border-gray-200">
+          {features.map((feature, index) => (
+            <li
+              key={index}
+              className={`cursor-pointer text-lg ${location.pathname === feature.route ? "text-blue-600 font-bold" : "hover:text-blue-600"}`}
+              onClick={() => {
+                navigate(feature.route);
+                closeMobileMenu();
+              }}
+            >
+              {feature.name}
+            </li>
+          ))}
+        </ul>
+      )}
     </nav>
   );
 };

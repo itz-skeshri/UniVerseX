@@ -6,14 +6,23 @@ function CommunitySideBar() {
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
 
+  const menuItems = [
+    { name: "Edit Your Profile", route: "/profileEdit" },
+    { name: "My Profile", route: "/profile" },
+    { name: "Dashboard", route: "/dashboard" },
+    { name: "Community", route: "/community" },
+    { name: "Budget Tracker", route: "/budget" },
+    { name: "Class Routine", route: "/class" },
+    { name: "Attendance Tracker", route: "/attendance" },
+  ];
 
   return (
-    <aside className="w-full md:w-1/4 bg-white p-4 rounded-lg shadow-md md:sticky md:top-4 mb-4 md:mb-0">
+    <aside className="hidden md:block w-1/4 bg-white p-4 rounded-lg shadow-md md:sticky md:top-4 mb-4 md:mb-0">
       {/* Profile Section */}
       {user ? (
         <div className="hidden md:flex flex-col items-center text-center">
           <img
-            src={user?.image || "/default-profile.png"} // ✅ Default profile image
+            src={user?.image || "/default-profile.png"}
             alt="Profile"
             className="w-24 h-24 rounded-full object-cover border-2 border-blue-500"
           />
@@ -25,32 +34,22 @@ function CommunitySideBar() {
           </p>
         </div>
       ) : (
-        <p className="text-center text-gray-500">Loading user data...</p> // ✅ Prevents crash
+        <p className="text-center text-gray-500">Loading user data...</p>
       )}
 
       <hr className="md:my-4 hidden md:flex" />
 
       {/* Sidebar Menu */}
-      <ul className="text-gray-700 flex md:flex-col justify-between">
-        <li
-          className="p-2 text-sm md:text-base hover:bg-gray-200 rounded-lg cursor-pointer"
-          onClick={() => navigate("/profile")}
-        >
-          Edit Profile
-        </li>
-        <li className="p-2 text-sm md:text-base hover:bg-gray-200 rounded-lg cursor-pointer">
-          Dashboard
-        </li>
-        <li className="p-2 text-sm md:text-base hover:bg-gray-200 rounded-lg cursor-pointer">
-          My Posts
-        </li>
-        <li className="p-2 text-sm md:text-base hover:bg-gray-200 rounded-lg cursor-pointer">
-          Saved Items
-        </li>
-        <li className="p-2 text-sm md:text-base hover:bg-gray-200 rounded-lg cursor-pointer">
-          Settings
-        </li>
-        
+      <ul className="text-gray-700 flex-col justify-between">
+        {menuItems.map((item, index) => (
+          <li
+            key={index}
+            className="p-2 text-sm md:text-base hover:bg-gray-200 rounded-lg cursor-pointer"
+            onClick={() => navigate(item.route)}
+          >
+            {item.name}
+          </li>
+        ))}
       </ul>
     </aside>
   );

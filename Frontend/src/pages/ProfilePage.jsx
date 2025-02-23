@@ -4,7 +4,7 @@ import { FaInstagram, FaLinkedin, FaPhone } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import PostCard from "../components/PostCard";
 
-const DashboardPage = () => {
+const ProfilePage = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const userPosts = useSelector((state) => state.posts.userPosts);
@@ -101,4 +101,4 @@ const DashboardPage = () => {
   );
 };
 
-export default DashboardPage;
+export default ProfilePage;

@@ -47,7 +47,7 @@ function ProfileEdit() {
       <div className="w-full max-w-4xl flex flex-col md:flex-row bg-white text-black rounded-lg overflow-hidden shadow-lg">
         {/* Image Section */}
         <div className="hidden md:flex md:w-1/2 items-center justify-center bg-gray-200">
-          <img src="/image.png" alt="Profile Edit" className="w-full h-full object-cover" />
+          <img src="/ProfileEdit.jpg" alt="Profile Edit" className="w-full h-full object-cover" />
         </div>
 
         {/* Form Section */}

@@ -3,8 +3,8 @@ import Calendar from "react-calendar";
 import { toast } from "react-toastify";
 import "react-calendar/dist/Calendar.css";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
-// Dummy class routine
 const dummyRoutine = [
   { day: "Monday", subjects: ["Math", "Physics"] },
   { day: "Tuesday", subjects: ["Chemistry", "English"] },
@@ -20,24 +20,14 @@ const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Sat
 
 const ClassRoutine = () => {
   const [date, setDate] = useState(new Date());
-  const [attendance, setAttendance] = useState({}); // Stores attendance before submission
-  const [submittedAttendance, setSubmittedAttendance] = useState({}); // Stores final submitted attendance
-  const [subjectAttendance, setSubjectAttendance] = useState({}); // Stores attendance percentage for each subject
+  const [attendance, setAttendance] = useState({});
+  const [submittedAttendance, setSubmittedAttendance] = useState({});
+  const [subjectAttendance, setSubjectAttendance] = useState({});
+  const navigate = useNavigate();
 
-  // 📅 Get subjects for selected date
   const selectedDay = daysOfWeek[date.getDay() - 1] || "Monday";
   const subjectsForSelectedDay = dummyRoutine.find((d) => d.day === selectedDay)?.subjects || [];
 
-  // 🔔 Mock Notifications
-  // useEffect(() => {
-  //   if (subjectsForSelectedDay.length > 0) {
-  //     subjectsForSelectedDay.forEach((subject) => {
-  //       toast.info(`📢 Upcoming Class: ${subject} at 10:00 AM`);
-  //     });
-  //   }
-  // }, [date]);
-
-  // 📌 Handle attendance selection
   const handleAttendance = (subject, status) => {
     setAttendance((prev) => ({
       ...prev,
@@ -45,22 +35,18 @@ const ClassRoutine = () => {
     }));
   };
 
-  // ✅ Submit Attendance
   const handleSubmitAttendance = () => {
     setSubmittedAttendance((prev) => ({
       ...prev,
       ...attendance,
     }));
 
-    // Calculate attendance percentage per subject
     let subjectStats = {};
-
     Object.values(attendance).forEach((day) => {
       Object.entries(day).forEach(([subject, status]) => {
         if (!subjectStats[subject]) {
           subjectStats[subject] = { attended: 0, total: 0 };
         }
-
         if (status !== "Canceled") {
           subjectStats[subject].total++;
           if (status === "Attended") subjectStats[subject].attended++;
@@ -81,8 +67,6 @@ const ClassRoutine = () => {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold">📆 Class Routine & Attendance Tracker</h1>
-
-      {/* 📆 Calendar + Schedule */}
       <div className="mt-4 md:flex md:space-x-4 space-y-4 md:space-y-0">
         <Calendar className="border rounded-lg p-2" onChange={setDate} value={date} />
         <div className="p-4 border rounded-lg shadow-md w-full">
@@ -98,9 +82,7 @@ const ClassRoutine = () => {
                 >
                   <option value="">Mark Attendance</option>
                   {attendanceOptions.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
+                    <option key={option} value={option}>{option}</option>
                   ))}
                 </select>
               </div>
@@ -110,26 +92,20 @@ const ClassRoutine = () => {
           )}
         </div>
       </div>
-
-      {/* ✅ Submit Button */}
       <div className="mt-4">
-        <button
-          onClick={handleSubmitAttendance}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
+        <button onClick={handleSubmitAttendance} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2">
           Submit Attendance
         </button>
+        <button onClick={() => navigate("/routineinput")} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+          Update Routine
+        </button>
       </div>
-
-      {/* 📊 Attendance Percentage Per Subject */}
       <div className="mt-6 p-4 border rounded-lg shadow-md">
         <h2 className="text-xl font-semibold">📊 Subject-wise Attendance</h2>
         {Object.keys(subjectAttendance).length > 0 ? (
           <ul className="mt-2">
             {Object.entries(subjectAttendance).map(([subject, percentage]) => (
-              <li key={subject} className="p-2 border-b">
-                {subject}: <span className="font-bold">{percentage}</span>
-              </li>
+              <li key={subject} className="p-2 border-b">{subject}: <span className="font-bold">{percentage}</span></li>
             ))}
           </ul>
         ) : (
