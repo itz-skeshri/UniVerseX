@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 // Define the Profile schema
 const profileSchema = new mongoose.Schema({
-
 	about: {
 		type: String,
 		trim: true,
@@ -11,11 +10,11 @@ const profileSchema = new mongoose.Schema({
 		type: Number,
 		trim: true,
 	},
-	socialLinks: {
-				github: { type: String, default: "" },
-				linkedin: { type: String, default: "" },
-			},
+	insta: { type: String, default: "" },
+	linkedin: { type: String, default: "" },
+	department: { type: String, trim: true, default: "" }, // New field
+	graduationYear: { type: Number}, // New field
 });
-
+  
 // Export the Profile model
 module.exports = mongoose.model("profile", profileSchema);

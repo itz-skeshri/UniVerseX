@@ -1,8 +1,9 @@
 const Post = require("../models/postSchema");
 const User = require("../models/userSchema");
 const Comment = require("../models/commentSchema");
-const cloudinary = require("../config/cloudinary");
-const uploadImageToCloudinary = require("../utils/imageUploader");
+// const cloudinary = require("../config/cloudinary");
+const cloudinary = require('cloudinary').v2;
+const {uploadImageToCloudinary} = require("../utils/imageUploader");
 
 // 📌 Create a new post
 exports.createPost = async (req, res) => {
@@ -93,10 +94,14 @@ exports.deletePost = async (req, res) => {
             return res.status(403).json({ success: false, message: "Unauthorized to delete this post" });
         }
 
-        if (post.image) {
-            const publicId = post.image.split("/").pop().split(".")[0];
-            await cloudinary.uploader.destroy(`posts/${publicId}`);
-        }
+        // if (post.image) {
+        //     const publicId = post.image.split("/").pop().split(".")[0];
+        //     // await cloudinary.uploader.destroy(`posts/${publicId}`);
+        //     // console.log(await cloudinary.uploader.destroy());
+            
+        //     // cloudinary.api.delete_resources([publicId], function(result) { console.log(result) });
+        //     cloudinary.uploader.destroy(`${publicId}`, function(result) { console.log(result) });
+        // }
 
         await Comment.deleteMany({ post: post._id }); // Delete associated comments
         await post.deleteOne();

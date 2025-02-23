@@ -11,9 +11,7 @@ const userSchema = new mongoose.Schema(
 			type: Date,
 		},
         college: { type: String, required: true },
-        department: { type: String, required: true },
-        year: { type: Number, min: 1, max: 4 },
-        image: { type: String }, // Profile picture
+        image: { type: String}, // Profile picture
         additionalDetails: {
 			type: mongoose.Schema.Types.ObjectId,
 			required: true,
