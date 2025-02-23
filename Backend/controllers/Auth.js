@@ -16,14 +16,11 @@ exports.signup = async (req, res) => {
       lastName,
       email,
       password,
-      accountType,
       contactNumber,
       otp,
       gender,
       dateOfBirth,
       college,
-      department,
-      year,
     } = req.body;
 
     // Validate required fields
@@ -35,22 +32,20 @@ exports.signup = async (req, res) => {
       !otp ||
       !gender ||
       !dateOfBirth ||
-      !college ||
-      !department ||
-      !year
+      !college
     ) {
       return res.status(403).json({
         success: false,
         message: "All fields are required",
       });
     }
-
+    console.log(otp);
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({
         success: false,
-        message: "User already exists. Please sign in.",
+        message: "Email already registered. Please sign in",
       });
     }
 
@@ -83,13 +78,10 @@ exports.signup = async (req, res) => {
       email,
       contactNumber,
       password: hashedPassword,
-      accountType,
       college,
-      department,
-      year,
       additionalDetails: profileDetails._id,
       role: "Student",
-      image: `https://api.dicebear.com/7.x/pixel-art/svg?seed=${firstName}`,
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpmteUFDtMLPVMxqUwYc5I7vMhEi8RKQznPSeSMKZ_FG5DBWGDs25O8cK7N10GhNudeRY&usqp=CAU",
     });
 
     return res.status(200).json({
@@ -268,4 +260,34 @@ exports.getBalance = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Error fetching balance" });
   }
+};
+
+// get User Detail for Session persistance
+
+exports.getUser = async (req, res) => {
+  try {
+    const token = req.cookies.token;
+    if (!token) {
+      return res.status(401).json({ success: false, message: "Not authenticated" });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id).select("-password").populate("additionalDetails");
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    return res.status(200).json({ success: true, user });
+  } catch (error) {
+    console.error("Session Error:", error);
+    return res.status(500).json({ success: false, message: "Session expired or invalid" });
+  }
+};
+    
+
+// logout
+exports.logout = (req, res) => {
+  res.clearCookie("token", { httpOnly: true, secure: true, sameSite: "None" });
+  return res.status(200).json({ success: true, message: "Logged out successfully" });
 };

@@ -3,7 +3,7 @@ const {
     createComment, 
     replyToComment, 
     getPostComments, 
-    likeComment, 
+    likeComment,
     deleteComment 
 } = require("../controllers/commentController");
 
