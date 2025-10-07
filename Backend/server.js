@@ -40,7 +40,7 @@ app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp/" })); //shubham
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const corsoptions = {
-  origin: "http://localhost:5173",
+  origin: ["http://localhost:5173","https://universex-project.vercel.app"],
   methods: ["POST", "GET", "PUT", "DELETE"],
   credentials: true,
 };
